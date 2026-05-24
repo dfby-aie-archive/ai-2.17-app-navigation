@@ -1,43 +1,35 @@
-# Lesson Repo Template
+# 2.17 Application Flow Control with Navigation Frameworks
 
-Template for creating lesson repositories under **su-ntu-sctp**.
+## Lesson Overview
 
-## Naming (Option A)
-`5/3m-<track>-<module>.<lesson>-<topic-slug>`  
-**Examples**
-`5/3m-ai-3.1-java-intro`
+This lesson teaches learners how to implement multi-screen navigation in React Native apps using React Navigation. Starting from the limitations of manual screen switching with `useState`, learners build the same set of screens three times using different navigator types: Bottom Tabs, Drawer, and Stack. By the end, they understand when to use each navigator, how to pass data between screens via route parameters, and how state persistence behaviour differs across navigator types.
 
-## Naming (Option B) 
+## Dependencies
 
-`<track>-<module>.<lesson>-<topic-slug>`
+- [Self Studies](./studies.md)
+- [Lesson](./lesson.md)
+- [Assessment](./assessment.md)
+- [Assignment](./assignment.md)
 
-**Examples**
-`ai-3.1-java-intro`
+## Lesson Objectives
 
+- Explain why dedicated navigation libraries are needed in React Native and how React Navigation compares to React Router in web apps
+- Implement tab, drawer, and stack navigation using React Navigation, registering screens with `NavigationContainer` and the appropriate navigator
+- Pass data between screens using route parameters and access the navigation API from any component using the `useNavigation` hook
 
-## Structure
-```text
-.
-├─ README.md
-├─ lesson.md
-├─ assignment.md
-├─ quiz.md
-├─ studies.md
-├─ slides/
-│  └─ placeholder.txt
-├─ assets/
-│  ├─ images/
-│  └─ data/
-└─ .gitignore
-```
+## Lesson Plan
 
-
-## Use This Template
-1) Click **Use this template → Create new repository**  
-2) Name it using the convention above  
-3) Clone, edit files, commit, push
-
-## Notes
-- Put slides in `slides/` (pptx/pdf)  
-- Images in `assets/images/`, data in `assets/data/`  
-- Each file contains its own authoring instructions (open and follow the checklists inside)
+| Duration | What | How or Why |
+|---|---|---|
+| 10 min | Welcome and recap | Briefly revisit Lesson 2.16: React Native components, Expo setup; set context for today's focus on multi-screen apps |
+| 35 min | Lecture: Navigation in React Native | Slides: why navigation libraries exist, navigator types overview, NavigationContainer, screen registration, params, state persistence |
+| 5 min | Break | |
+| 10 min | Setup and the naive approach | Code-along: scaffold `LearnNavigationApp`, create shared screens and `Header` component, demonstrate the `useState` switcher and its limitations |
+| 30 min | Lab Part 1: Tab Navigation | Code-along: install React Navigation, `createBottomTabNavigator`, register screens, Activity 1 (add Explore tab), customise titles/labels/styling, Activity 2 (set icons for all tabs) |
+| 20 min | Lab Part 2: Drawer Navigation | Code-along: install drawer + gesture/animation deps, build `DrawerApp` alongside `BottomTabsApp`, customise styling and icons |
+| 5 min | Break | |
+| 30 min | Lab Part 3: Stack Navigation | Code-along: install native stack, build `MenuScreen`, wire `navigation.navigate`, introduce `useNavigation`, pass route params, set dynamic header titles, explain `useLayoutEffect` vs `options` callback |
+| 10 min | Lab Part 4: State Persistence | Demonstration: show state loss in Stack vs. state retention in Tabs/Drawer; introduce `useFocusEffect` to reset state on focus |
+| 10 min | Lab Part 5: Nesting Navigators | Code-along: wrap `BottomTabsApp` inside a stack, `headerShown: false`, `ProductDetailScreen` accessible from any tab |
+| 15 min | Wrap up and Q&A | Recap objectives, review when to use each navigator, preview Lesson 2.18 (native device capabilities) |
+| **Total** | | **~180 min** |
