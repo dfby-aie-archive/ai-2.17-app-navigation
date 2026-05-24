@@ -42,7 +42,7 @@ LearnNavigationApp/
 Create `components/Header.js` first. This is a simple reusable text component that will be used across all screens to display a heading:
 
 ```jsx
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from "react-native";
 
 function Header({ children }) {
   return <Text style={styles.headerText}>{children}</Text>;
@@ -53,7 +53,7 @@ export default Header;
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 20,
   },
 });
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
 Create `screens/HomeScreen.js`:
 
 ```jsx
-import { StyleSheet, Text, View } from 'react-native';
-import Header from '../components/Header';
+import { StyleSheet, Text, View } from "react-native";
+import Header from "../components/Header";
 
 function HomeScreen() {
   return (
@@ -79,9 +79,9 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 ```
@@ -97,25 +97,25 @@ Before adding React Navigation, look at what it takes to switch between screens 
 Update `App.js` to import both screens and toggle between them with a state variable:
 
 ```jsx
-import { useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import { useState } from "react";
+import { Button, StyleSheet, View } from "react-native";
+import HomeScreen from "./screens/HomeScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('Home');
+  const [currentScreen, setCurrentScreen] = useState("Home");
 
   let content;
-  if (currentScreen === 'Home') {
+  if (currentScreen === "Home") {
     content = <HomeScreen />;
-  } else if (currentScreen === 'Settings') {
+  } else if (currentScreen === "Settings") {
     content = <SettingsScreen />;
   }
 
   return (
     <View style={styles.container}>
-      <Button title="Home" onPress={() => setCurrentScreen('Home')} />
-      <Button title="Settings" onPress={() => setCurrentScreen('Settings')} />
+      <Button title="Home" onPress={() => setCurrentScreen("Home")} />
+      <Button title="Settings" onPress={() => setCurrentScreen("Settings")} />
       {content}
     </View>
   );
@@ -124,7 +124,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginTop: 50,
   },
 });
@@ -162,10 +162,10 @@ npm install @react-navigation/bottom-tabs
 Update `App.js` to replace the manual switcher with a proper tab navigator:
 
 ```jsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeScreen from "./screens/HomeScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -202,6 +202,7 @@ Create `screens/ExploreScreen.js` with the same structure as `HomeScreen`, using
 Register `ExploreScreen` as a third tab between `Home` and `Settings`.
 
 **Hints:**
+
 1. Import `ExploreScreen` from `./screens/ExploreScreen`
 2. Add a `Tab.Screen` inside `Tab.Navigator` with `name="Explore"` and `component={ExploreScreen}`
 3. Order matters: tabs appear in the order they are registered
@@ -210,11 +211,11 @@ Register `ExploreScreen` as a third tab between `Home` and `Settings`.
 <summary>Reference solution</summary>
 
 ```jsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen';
-import ExploreScreen from './screens/ExploreScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeScreen from "./screens/HomeScreen";
+import ExploreScreen from "./screens/ExploreScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -240,8 +241,8 @@ export default function App() {
 Create `screens/HotDealsScreen.js`:
 
 ```jsx
-import { StyleSheet, Text, View } from 'react-native';
-import Header from '../components/Header';
+import { StyleSheet, Text, View } from "react-native";
+import Header from "../components/Header";
 
 function HotDealsScreen() {
   return (
@@ -257,9 +258,9 @@ export default HotDealsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 ```
@@ -275,8 +276,8 @@ When the screen identifier name and the desired display title differ, use the `o
   name="HotDeals"
   component={HotDealsScreen}
   options={{
-    headerTitle: '🔥 Hot Deals!',
-    tabBarLabel: 'Hot Deals!',
+    headerTitle: "🔥 Hot Deals!",
+    tabBarLabel: "Hot Deals!",
   }}
 />
 ```
@@ -315,7 +316,7 @@ Use `screenOptions` on `Tab.Navigator` to apply styles to all screens at once. A
 Expo includes a large icon library. Import `Ionicons` from `@expo/vector-icons`:
 
 ```jsx
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 ```
 
 Use the `tabBarIcon` option to set an icon for the `Home` tab. The navigator provides `color` and `size` so the icon matches the active/inactive colour and the tab bar's icon size automatically:
@@ -341,6 +342,7 @@ Browse available icon names at https://icons.expo.fyi (filter by Ionicons).
 Set a `tabBarIcon` for the `Explore`, `HotDeals`, and `Settings` tabs. Choose icons that make sense for each screen.
 
 **Hints:**
+
 1. Browse https://icons.expo.fyi and filter by "Ionicons" to find icon names
 2. The pattern is identical to the `Home` tab: `({ color, size }) => <Ionicons name="..." size={size} color={color} />`
 3. Suitable starting points: `"search"` for Explore, `"bonfire-sharp"` for Hot Deals, `"settings"` for Settings
@@ -402,13 +404,13 @@ To keep the project self-contained, move the tab navigator into its own componen
 Create a `BottomTabsApp` component by wrapping the existing tab navigator code:
 
 ```jsx
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import HomeScreen from './screens/HomeScreen';
-import ExploreScreen from './screens/ExploreScreen';
-import HotDealsScreen from './screens/HotDealsScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import HomeScreen from "./screens/HomeScreen";
+import ExploreScreen from "./screens/ExploreScreen";
+import HotDealsScreen from "./screens/HotDealsScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -417,9 +419,9 @@ function BottomTabsApp() {
     <Tab.Navigator
       initialRouteName="Explore"
       screenOptions={{
-        headerStyle: { backgroundColor: '#e8590c' },
-        headerTintColor: '#fff',
-        tabBarActiveTintColor: '#e8590c',
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
+        tabBarActiveTintColor: "#e8590c",
       }}
     >
       <Tab.Screen
@@ -444,8 +446,8 @@ function BottomTabsApp() {
         name="HotDeals"
         component={HotDealsScreen}
         options={{
-          headerTitle: '🔥 Hot Deals!',
-          tabBarLabel: 'Hot Deals!',
+          headerTitle: "🔥 Hot Deals!",
+          tabBarLabel: "Hot Deals!",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bonfire-sharp" size={size} color={color} />
           ),
@@ -478,7 +480,7 @@ export default function App() {
 Now create a `DrawerApp` component in the same file:
 
 ```jsx
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();
 
@@ -486,10 +488,10 @@ function DrawerApp() {
   return (
     <Drawer.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#e8590c' },
-        headerTintColor: '#fff',
-        drawerActiveBackgroundColor: '#e8590c',
-        drawerActiveTintColor: '#fff',
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
+        drawerActiveBackgroundColor: "#e8590c",
+        drawerActiveTintColor: "#fff",
       }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
@@ -498,8 +500,8 @@ function DrawerApp() {
         name="HotDeals"
         component={HotDealsScreen}
         options={{
-          headerTitle: '🔥 Hot Deals!',
-          drawerLabel: 'Hot Deals!',
+          headerTitle: "🔥 Hot Deals!",
+          drawerLabel: "Hot Deals!",
         }}
       />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
@@ -561,8 +563,8 @@ There are two stack navigator packages: `@react-navigation/stack` (JavaScript-ba
 Create `screens/MenuScreen.js`. This screen will serve as the starting point for stack navigation, since the stack navigator does not have a built-in tab bar or drawer to browse screens from:
 
 ```jsx
-import { Button, StyleSheet, View } from 'react-native';
-import Header from '../components/Header';
+import { Button, StyleSheet, View } from "react-native";
+import Header from "../components/Header";
 
 function MenuScreen() {
   return (
@@ -583,9 +585,9 @@ export default MenuScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonsContainer: {
     gap: 5,
@@ -598,8 +600,8 @@ const styles = StyleSheet.create({
 Create a `StackApp` component in `App.js`:
 
 ```jsx
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MenuScreen from './screens/MenuScreen';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import MenuScreen from "./screens/MenuScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -607,8 +609,8 @@ function StackApp() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#e8590c' },
-        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
       }}
     >
       <Stack.Screen name="Menu" component={MenuScreen} />
@@ -647,10 +649,19 @@ function MenuScreen({ navigation }) {
     <View style={styles.container}>
       <Header>Menu</Header>
       <View style={styles.buttonsContainer}>
-        <Button title="Home" onPress={() => navigation.navigate('Home')} />
-        <Button title="Explore" onPress={() => navigation.navigate('Explore')} />
-        <Button title="Hot Deals" onPress={() => navigation.navigate('HotDeals')} />
-        <Button title="Settings" onPress={() => navigation.navigate('Settings')} />
+        <Button title="Home" onPress={() => navigation.navigate("Home")} />
+        <Button
+          title="Explore"
+          onPress={() => navigation.navigate("Explore")}
+        />
+        <Button
+          title="Hot Deals"
+          onPress={() => navigation.navigate("HotDeals")}
+        />
+        <Button
+          title="Settings"
+          onPress={() => navigation.navigate("Settings")}
+        />
       </View>
     </View>
   );
@@ -669,10 +680,16 @@ Move the buttons into a separate `MenuOptions` component to demonstrate this:
 function MenuOptions({ navigation }) {
   return (
     <View style={styles.buttonsContainer}>
-      <Button title="Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Explore" onPress={() => navigation.navigate('Explore')} />
-      <Button title="Hot Deals" onPress={() => navigation.navigate('HotDeals')} />
-      <Button title="Settings" onPress={() => navigation.navigate('Settings')} />
+      <Button title="Home" onPress={() => navigation.navigate("Home")} />
+      <Button title="Explore" onPress={() => navigation.navigate("Explore")} />
+      <Button
+        title="Hot Deals"
+        onPress={() => navigation.navigate("HotDeals")}
+      />
+      <Button
+        title="Settings"
+        onPress={() => navigation.navigate("Settings")}
+      />
     </View>
   );
 }
@@ -690,17 +707,23 @@ function MenuScreen({ navigation }) {
 This works, but passing `navigation` down as a prop becomes awkward in deeply nested components. React Navigation provides the `useNavigation` hook to solve this:
 
 ```jsx
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 function MenuOptions() {
   const navigation = useNavigation();
 
   return (
     <View style={styles.buttonsContainer}>
-      <Button title="Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Explore" onPress={() => navigation.navigate('Explore')} />
-      <Button title="Hot Deals" onPress={() => navigation.navigate('HotDeals')} />
-      <Button title="Settings" onPress={() => navigation.navigate('Settings')} />
+      <Button title="Home" onPress={() => navigation.navigate("Home")} />
+      <Button title="Explore" onPress={() => navigation.navigate("Explore")} />
+      <Button
+        title="Hot Deals"
+        onPress={() => navigation.navigate("HotDeals")}
+      />
+      <Button
+        title="Settings"
+        onPress={() => navigation.navigate("Settings")}
+      />
     </View>
   );
 }
@@ -722,8 +745,8 @@ function MenuScreen() {
 Create `screens/ProductDetailScreen.js`:
 
 ```jsx
-import { StyleSheet, Text, View } from 'react-native';
-import Header from '../components/Header';
+import { StyleSheet, Text, View } from "react-native";
+import Header from "../components/Header";
 
 function ProductDetailScreen() {
   return (
@@ -739,9 +762,9 @@ export default ProductDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 ```
@@ -755,8 +778,8 @@ Register it in `StackApp`:
 Update `HotDealsScreen` to show product buttons that navigate to `ProductDetailScreen` with data attached. To use the `navigation` prop here, either accept it as a prop (since `HotDealsScreen` is a registered screen) or use `useNavigation`:
 
 ```jsx
-import { Button, StyleSheet, View } from 'react-native';
-import Header from '../components/Header';
+import { Button, StyleSheet, View } from "react-native";
+import Header from "../components/Header";
 
 function HotDealsScreen({ navigation }) {
   return (
@@ -765,22 +788,22 @@ function HotDealsScreen({ navigation }) {
       <Button
         title="Apple iPad @ $299"
         onPress={() =>
-          navigation.navigate('ProductDetail', {
-            product: 'Apple iPad',
+          navigation.navigate("ProductDetail", {
+            product: "Apple iPad",
             id: 123,
             price: 299,
-            fromScreen: 'HotDeals',
+            fromScreen: "HotDeals",
           })
         }
       />
       <Button
         title="Apple iPhone @ $999"
         onPress={() =>
-          navigation.navigate('ProductDetail', {
-            product: 'Apple iPhone',
+          navigation.navigate("ProductDetail", {
+            product: "Apple iPhone",
             id: 124,
             price: 999,
-            fromScreen: 'HotDeals',
+            fromScreen: "HotDeals",
           })
         }
       />
@@ -792,9 +815,9 @@ function HotDealsScreen({ navigation }) {
 Now update `ProductDetailScreen` to read the params using the `useRoute` hook:
 
 ```jsx
-import { StyleSheet, Text, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import Header from '../components/Header';
+import { StyleSheet, Text, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import Header from "../components/Header";
 
 function ProductDetailScreen() {
   const { params } = useRoute();
@@ -821,7 +844,7 @@ The header title on `ProductDetailScreen` currently shows "ProductDetail". To di
   name="ProductDetail"
   component={ProductDetailScreen}
   options={({ route }) => ({
-    title: `Product Detail: ${route.params?.product ?? ''}`,
+    title: `Product Detail: ${route.params?.product ?? ""}`,
   })}
 />
 ```
@@ -841,12 +864,12 @@ This section demonstrates a behaviour that commonly surprises developers. Follow
 Add a search input to `HomeScreen`. First, update `HomeScreen.js` to accept a `navigation` prop and add a text input:
 
 ```jsx
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { useState } from 'react';
-import Header from '../components/Header';
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import Header from "../components/Header";
 
 function HomeScreen({ navigation }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <View style={styles.container}>
@@ -867,9 +890,9 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   welcomeText: {
     fontSize: 20,
@@ -877,12 +900,12 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 20,
-    width: '80%',
+    width: "80%",
   },
 });
 ```
@@ -918,16 +941,16 @@ What if you want to clear the search field each time the user arrives at `HomeSc
 Update `HomeScreen.js`:
 
 ```jsx
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 
 function HomeScreen() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useFocusEffect(
     useCallback(() => {
-      setSearchQuery('');
-    }, [])
+      setSearchQuery("");
+    }, []),
   );
 
   // ... rest of component
@@ -947,8 +970,8 @@ Production apps commonly combine navigators. A typical pattern is to nest a bott
 Create a `NestedApp` component in `App.js`:
 
 ```jsx
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -957,9 +980,9 @@ function BottomTabsApp() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#e8590c' },
-        headerTintColor: '#fff',
-        tabBarActiveTintColor: '#e8590c',
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
+        tabBarActiveTintColor: "#e8590c",
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
@@ -967,7 +990,7 @@ function BottomTabsApp() {
       <Tab.Screen
         name="HotDeals"
         component={HotDealsScreen}
-        options={{ headerTitle: '🔥 Hot Deals!', tabBarLabel: 'Hot Deals!' }}
+        options={{ headerTitle: "🔥 Hot Deals!", tabBarLabel: "Hot Deals!" }}
       />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
@@ -978,8 +1001,8 @@ function NestedApp() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#e8590c' },
-        headerTintColor: '#fff',
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
       }}
     >
       <Stack.Screen
@@ -991,8 +1014,8 @@ function NestedApp() {
         name="ProductDetail"
         component={ProductDetailScreen}
         options={({ route }) => ({
-          title: `Product Detail: ${route.params?.product ?? ''}`,
-          headerBackTitle: route.params?.fromScreen ?? 'Back',
+          title: `Product Detail: ${route.params?.product ?? ""}`,
+          headerBackTitle: route.params?.fromScreen ?? "Back",
         })}
       />
     </Stack.Navigator>
@@ -1044,6 +1067,318 @@ Test this in both the tab navigator and the stack navigator. Describe in your ow
 ### Challenge 4: Nested drawer inside tabs
 
 Replace one of the tabs in `BottomTabsApp` with a `DrawerApp` as its component. What happens when you tap that tab? What are the usability problems with this pattern? When might nesting a drawer inside a tab actually be appropriate?
+
+---
+
+## Optional Extension: Authenticated Navigation
+
+> **Only if time permits.** This section adds a login flow to the app using the same navigation patterns already covered. It requires familiarity with the Context API from Lesson 2.6.
+
+Many apps show a different set of screens depending on whether the user is logged in. The standard pattern in React Navigation is to maintain two separate navigator stacks and conditionally render one based on authentication state.
+
+### Step 1: Create the Auth Context
+
+Create `context/AuthContext.js`. This context holds the authentication state and exposes `login` and `logout` functions:
+
+```jsx
+import { createContext, useState } from "react";
+
+export const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const login = async (username, password) => {
+    // In a real app, call your API here and check credentials
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export default AuthContext;
+```
+
+### Step 2: Create the Login and Register screens
+
+Create `screens/LoginScreen.js`:
+
+```jsx
+import { useContext, useState } from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import AuthContext from "../context/AuthContext";
+
+export default function LoginScreen({ navigation }) {
+  const { login } = useContext(AuthContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <View style={styles.buttonsContainer}>
+        <Button title="Login" onPress={() => login(username, password)} />
+        <Button
+          title="Register"
+          onPress={() => navigation.navigate("Register")}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 24,
+  },
+  input: {
+    width: "70%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 16,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+});
+```
+
+Create `screens/RegisterScreen.js` with the same structure, replacing the Login button with a Register button that calls `navigation.goBack()` after a mock registration:
+
+```jsx
+import { useState } from "react";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+
+export default function RegisterScreen({ navigation }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = () => {
+    Alert.alert("Mock Register", "This is a mock register function.");
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Register</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <View style={styles.buttonsContainer}>
+        <Button title="Register" onPress={handleRegister} />
+        <Button title="Back to Login" onPress={() => navigation.goBack()} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 24,
+  },
+  input: {
+    width: "70%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 16,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    gap: 10,
+  },
+});
+```
+
+### Step 3: Create the navigator files
+
+Create a `navigators/` folder to keep the navigation configuration organised.
+
+Create `navigators/AuthStackNavigator.js`. This stack is shown when the user is not logged in:
+
+```jsx
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+
+const Stack = createNativeStackNavigator();
+
+export default function AuthStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+    </Stack.Navigator>
+  );
+}
+```
+
+Create `navigators/AppStackNavigator.js`. This stack is shown when the user is logged in. It wraps the `BottomTabsApp` from Part 5 and adds `ProductDetailScreen` at the outer level:
+
+```jsx
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import BottomTabsApp from "./BottomTabsNavigator";
+import ProductDetailScreen from "../screens/ProductDetailScreen";
+
+const Stack = createNativeStackNavigator();
+
+export default function AppStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#e8590c" },
+        headerTintColor: "#fff",
+      }}
+    >
+      <Stack.Screen
+        name="BottomTabs"
+        component={BottomTabsApp}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+        options={({ route }) => ({
+          title: `Product Detail: ${route.params?.product ?? ""}`,
+          headerBackTitle: route.params?.fromScreen ?? "Back",
+        })}
+      />
+    </Stack.Navigator>
+  );
+}
+```
+
+### Step 4: Create the NavigationApp and conditionally render the correct stack
+
+Create `navigators/NavigationApp.js`. This component reads `isAuthenticated` from context and renders either the app stack or the auth stack:
+
+```jsx
+import { useContext } from "react";
+import { ActivityIndicator, View } from "react-native";
+import AuthContext from "../context/AuthContext";
+import AppStackNavigator from "./AppStackNavigator";
+import AuthStackNavigator from "./AuthStackNavigator";
+
+export default function NavigationApp() {
+  const { isAuthenticated } = useContext(AuthContext);
+
+  if (isAuthenticated === null) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return isAuthenticated ? <AppStackNavigator /> : <AuthStackNavigator />;
+}
+```
+
+### Step 5: Wire everything up in App.js
+
+Update `App.js` to wrap `NavigationApp` with both `AuthProvider` and `NavigationContainer`:
+
+```jsx
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider } from "./context/AuthContext";
+import NavigationApp from "./navigators/NavigationApp";
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <NavigationContainer>
+        <NavigationApp />
+      </NavigationContainer>
+    </AuthProvider>
+  );
+}
+```
+
+**Device check:** the app opens on the Login screen. Tapping Login navigates into the main app with the bottom tab navigator. There is no back button because the entire navigator stack was swapped, not pushed.
+
+### Step 6: Add a Logout button
+
+Add a Logout button to `SettingsScreen` so users can return to the login flow:
+
+```jsx
+import { useContext } from "react";
+import { Button, StyleSheet, View } from "react-native";
+import AuthContext from "../context/AuthContext";
+import Header from "../components/Header";
+
+function SettingsScreen() {
+  const { logout } = useContext(AuthContext);
+
+  return (
+    <View style={styles.container}>
+      <Header>Settings</Header>
+      <Button title="Logout" onPress={logout} />
+    </View>
+  );
+}
+```
+
+**Device check:** tapping Logout returns to the Login screen. The navigation history is cleared because the navigator stack itself was replaced, so the user cannot press back into the app.
+
+> Swapping the entire navigator stack on login/logout is the standard React Navigation pattern for authentication. Because `NavigationApp` conditionally returns a completely different navigator, React Navigation unmounts the old stack and mounts the new one. There is no need to manually clear navigation history.
 
 ---
 

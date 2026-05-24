@@ -31,5 +31,6 @@ This lesson teaches learners how to implement multi-screen navigation in React N
 | 30 min | Lab Part 3: Stack Navigation | Code-along: install native stack, build `MenuScreen`, wire `navigation.navigate`, introduce `useNavigation`, pass route params, set dynamic header titles, explain `useLayoutEffect` vs `options` callback |
 | 10 min | Lab Part 4: State Persistence | Demonstration: show state loss in Stack vs. state retention in Tabs/Drawer; introduce `useFocusEffect` to reset state on focus |
 | 10 min | Lab Part 5: Nesting Navigators | Code-along: wrap `BottomTabsApp` inside a stack, `headerShown: false`, `ProductDetailScreen` accessible from any tab |
+| 15 min | Optional: Authenticated Navigation | Code-along: `AuthContext`, `LoginScreen`, `RegisterScreen`, split stacks, conditional navigator rendering, Logout button; skip if time is short |
 | 15 min | Wrap up and Q&A | Recap objectives, review when to use each navigator, preview Lesson 2.18 (native device capabilities) |
-| **Total** | | **~180 min** |
+| **Total** | | **~180 min core; up to ~195 min with optional section** |
