@@ -15,33 +15,54 @@ By the end of this lesson, you will be able to:
 
 ---
 
-## Setup: Create the Project
+## Setup: Create the Project (10 minutes)
 
 This lesson uses a fresh Expo app. Open a terminal and run:
 
 ```bash
-npx create-expo-app --template blank LearnNavigationApp
-cd LearnNavigationApp
+npx create-expo-app --template blank learn-navigation-app
+cd learn-navigation-app
 npx expo start
 ```
 
 Open the emulator or scan the QR code with Expo Go. Confirm the default screen loads.
 
+As in Lesson 2.16, set up the linter now before writing any code:
+
+```bash
+npx expo lint
+```
+
+> If this is the first time linting has run in this project, the CLI will offer to install and create an ESLint config - accept the default. Keep this command handy throughout the lesson: this lab involves creating many new files and wiring up props between them, and running `npx expo lint` after each step catches typos and missing imports before they show up as a red error screen on the device.
+
 Inside the project, create the following folder structure:
 
 ```
-LearnNavigationApp/
+learn-navigation-app/
   screens/
     HomeScreen.js
     SettingsScreen.js
   components/
     Header.js
+  styles/
+    colors.js
   App.js
 ```
 
-Create `components/Header.js` first. This is a simple reusable text component that will be used across all screens to display a heading:
+As in Lesson 2.16, keep the brand color in one place rather than repeating it throughout the app. This lesson configures the same orange header across every navigator, so the payoff shows up quickly. Create `styles/colors.js`:
+
+```js
+// styles/colors.js
+export const Colors = {
+  PRIMARY: "#e8590c",
+  WHITE: "#fff",
+};
+```
+
+Create `components/Header.js` next. This is a simple reusable text component that will be used across all screens to display a heading:
 
 ```jsx
+// components/Header.js
 import { Text, StyleSheet } from "react-native";
 
 function Header({ children }) {
@@ -62,10 +83,12 @@ const styles = StyleSheet.create({
 Create `screens/HomeScreen.js`:
 
 ```jsx
+// screens/HomeScreen.js
 import { StyleSheet, Text, View } from "react-native";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function HomeScreen() {
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Header>Home</Header>
@@ -74,12 +97,10 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -90,13 +111,14 @@ Create `screens/SettingsScreen.js` using the same structure, replacing `Home` wi
 
 ---
 
-## The Problem: Navigating Without a Library
+## The Problem: Navigating Without a Library (5 minutes, instructor demo)
 
 Before adding React Navigation, look at what it takes to switch between screens manually.
 
 Update `App.js` to import both screens and toggle between them with a state variable:
 
 ```jsx
+// App.js
 import { useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
@@ -138,30 +160,39 @@ This is why React Navigation exists.
 
 ---
 
-## Part 1: Tab Navigation
+## Part 1: React Navigation (5 minutes)
 
-### Step 1: Install React Navigation
+React Navigation is a standalone library, it is not part of React Native itself. It provides three main navigator types, each suited to a different navigation pattern:
 
-Install the core package and its required dependencies:
+- **Bottom Tabs**, a fixed row of tabs, usually at the bottom of the screen, for switching between a handful of top-level, equally-important sections
+- **Drawer**, a slide-in side panel, useful when there are more top-level sections than comfortably fit in a tab bar
+- **Stack**, a history-based navigator that pushes and pops screens, used for drill-down flows such as a list screen leading to a detail screen
+
+All three navigator types share the same underlying package and configuration pattern. Install the core package and its required dependencies once, they are shared across every navigator used later in this lesson:
 
 ```bash
 npm install @react-navigation/native
 npx expo install react-native-screens react-native-safe-area-context
 ```
 
-`react-native-safe-area-context` was already installed in Lesson 2.15, but the command is safe to run again. Expo will confirm the correct version is in place.
+The rest of this lesson works through each navigator type in turn, starting with Bottom Tabs.
 
-### Step 2: Install the Bottom Tabs package
+---
+
+## Part 2: Tab Navigation (35 minutes)
+
+### Step 1: Install the Bottom Tabs package
 
 ```bash
 npm install @react-navigation/bottom-tabs
 ```
 
-### Step 3: Set up the navigator
+### Step 2: Set up the navigator
 
 Update `App.js` to replace the manual switcher with a proper tab navigator:
 
 ```jsx
+// App.js
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
@@ -187,11 +218,11 @@ Three things to note about this code:
 
 - `NavigationContainer` is the top-level wrapper that manages the navigation tree and holds the navigation state. Every React Navigation app must use it at the root.
 - `Tab` gives you two components: `Tab.Navigator` (the container that manages the tabs) and `Tab.Screen` (used to register each screen inside it).
-- The `name` prop is a unique identifier used for navigation. It also becomes the header title and tab label by default, so choose it thoughtfully.
+- The `name` prop is a unique identifier used for navigation. It also becomes the header title and tab label by default.
 
 > **Common mistake:** Passing a JSX element as the `component` prop, for example `component={<HomeScreen />}`. The navigator expects a component reference (`component={HomeScreen}`), not a rendered element. Passing JSX causes React Navigation to create a new component type on every render, leading to unexpected re-mounts and state loss.
 
-### Step 4: Add a third screen
+### Step 3: Add a third screen
 
 Create `screens/ExploreScreen.js` with the same structure as `HomeScreen`, using `Explore` as the heading.
 
@@ -199,7 +230,7 @@ Create `screens/ExploreScreen.js` with the same structure as `HomeScreen`, using
 
 ## Activity 1: Register the Explore Screen
 
-Register `ExploreScreen` as a third tab between `Home` and `Settings`.
+Register `ExploreScreen` as a second tab between `Home` and `Settings`.
 
 **Hints:**
 
@@ -211,6 +242,7 @@ Register `ExploreScreen` as a third tab between `Home` and `Settings`.
 <summary>Reference solution</summary>
 
 ```jsx
+// App.js
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
@@ -236,15 +268,17 @@ export default function App() {
 
 ---
 
-### Step 5: Create the HotDeals screen
+### Step 4: Create the HotDeals screen
 
 Create `screens/HotDealsScreen.js`:
 
 ```jsx
+// screens/HotDealsScreen.js
 import { StyleSheet, Text, View } from "react-native";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function HotDealsScreen() {
+export default function HotDealsScreen() {
   return (
     <View style={styles.container}>
       <Header>Hot Deals</Header>
@@ -253,12 +287,10 @@ function HotDealsScreen() {
   );
 }
 
-export default HotDealsScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -267,11 +299,12 @@ const styles = StyleSheet.create({
 
 Register it as a tab with `name="HotDeals"`. Note that the tab label and header title will show "HotDeals" by default, which is not ideal.
 
-### Step 6: Customise screen titles and tab labels
+### Step 5: Customise screen titles and tab labels
 
 When the screen identifier name and the desired display title differ, use the `options` prop on `Tab.Screen`:
 
 ```jsx
+// App.js
 <Tab.Screen
   name="HotDeals"
   component={HotDealsScreen}
@@ -284,44 +317,62 @@ When the screen identifier name and the desired display title differ, use the `o
 
 `headerTitle` controls the text in the top header bar. `tabBarLabel` controls the label under the tab icon at the bottom.
 
-### Step 7: Set a default screen
+> **Per-screen styling:** `options` is not limited to titles and labels. Style properties like `headerStyle` and `headerTintColor` can be set here too, which overrides the navigator's styling for this one screen only. This is useful for making a single screen stand out, for example giving the Hot Deals screen its own header colour instead of the shared brand colour applied in Step 7.
+
+### Step 6: Set a default screen
 
 The first registered screen is shown on launch. To change the default without reordering tabs, use `initialRouteName` on `Tab.Navigator`:
 
 ```jsx
+// App.js
 <Tab.Navigator initialRouteName="Explore">
 ```
 
-### Step 8: Style the navigator
+### Step 7: Style the navigator
 
-Use `screenOptions` on `Tab.Navigator` to apply styles to all screens at once. Add a brand colour to the header and the active tab:
+Use `screenOptions` on `Tab.Navigator` to apply styles to all screens at once. Add a brand colour to the header and the active tab, importing it from `styles/colors.js`:
 
 ```jsx
+// App.js
+import { Colors } from "./styles/colors";
+
 <Tab.Navigator
   initialRouteName="Explore"
   screenOptions={{
-    headerStyle: { backgroundColor: '#e8590c' },
-    headerTintColor: '#fff',
-    tabBarActiveTintColor: '#e8590c',
+    headerStyle: { backgroundColor: Colors.PRIMARY },
+    headerTintColor: Colors.WHITE,
+    tabBarActiveTintColor: Colors.PRIMARY,
   }}
 >
 ```
 
 `headerStyle` sets the background colour of the top header. `headerTintColor` sets the colour of the header title text. `tabBarActiveTintColor` sets the colour of the active tab icon and label.
 
+This is the same `headerStyle` and `headerTintColor` used in the `options` prop in Step 5, set here on `screenOptions` instead so it applies to every screen at once rather than just one.
+
 **Device check:** the header has an orange background, and the active tab appears orange.
 
-### Step 9: Add tab icons
+### Step 8: Add tab icons
 
-Expo includes a large icon library. Import `Ionicons` from `@expo/vector-icons`:
+Install the Ionicons icon package:
+
+```bash
+npx expo install @react-native-vector-icons/ionicons
+```
+
+> Expo previously bundled `@expo/vector-icons` by default, but this is no longer the case as of the [move away from a bundled icon library](https://expo.dev/blog/moving-away-from-expo-vector-icons). Icon sets are now installed individually as needed.
+
+Import `Ionicons` as the default export:
 
 ```jsx
-import { Ionicons } from "@expo/vector-icons";
+// App.js
+import Ionicons from "@react-native-vector-icons/ionicons";
 ```
 
 Use the `tabBarIcon` option to set an icon for the `Home` tab. The navigator provides `color` and `size` so the icon matches the active/inactive colour and the tab bar's icon size automatically:
 
 ```jsx
+// App.js
 <Tab.Screen
   name="Home"
   component={HomeScreen}
@@ -351,6 +402,7 @@ Set a `tabBarIcon` for the `Explore`, `HotDeals`, and `Settings` tabs. Choose ic
 <summary>Reference solution</summary>
 
 ```jsx
+// App.js
 // Explore tab
 options={{
   tabBarIcon: ({ color, size }) => (
@@ -379,49 +431,54 @@ options={{
 
 ---
 
-## Part 2: Drawer Navigation
+## Part 3: Drawer Navigation (25 minutes)
 
 A drawer navigator presents screens in a slide-in side panel rather than tabs at the bottom. The configuration pattern is nearly identical to the tab navigator.
 
 ### Step 1: Install the drawer packages
 
 ```bash
+npx expo install react-native-gesture-handler react-native-reanimated react-native-worklets
 npm install @react-navigation/drawer
-npx expo install react-native-gesture-handler react-native-reanimated
 ```
 
-Two additional packages are required:
+Three additional packages are required:
 
 - `react-native-gesture-handler` enables swipe gestures so users can open and close the drawer with a swipe
 - `react-native-reanimated` powers the smooth slide-in animation without blocking the JavaScript thread
+- `react-native-worklets` provides the worklets runtime that Reanimated 4 depends on
+
+> **Install order matters here.** Installing `react-native-reanimated` first via `npx expo install` lets Expo pin a version compatible with your installed React Native version. If `@react-navigation/drawer` is installed first, npm may try to resolve `react-native-reanimated` to its newest version before Expo gets a chance to select the compatible one, which can produce an `ERESOLVE` peer dependency error.
 
 Kill the development server and restart it after installation. These are native modules and require a fresh build to load correctly.
 
-### Step 2: Create a DrawerApp component
+### Step 2: Create a DrawerNavigator component
 
 To keep the project self-contained, move the tab navigator into its own component and add a new drawer component alongside it. This lets you switch between the two in `App.js` to compare them.
 
-Create a `BottomTabsApp` component by wrapping the existing tab navigator code:
+Create a `BottomTabsNavigator` component by wrapping the existing tab navigator code:
 
 ```jsx
+// App.js
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import HomeScreen from "./screens/HomeScreen";
 import ExploreScreen from "./screens/ExploreScreen";
 import HotDealsScreen from "./screens/HotDealsScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import { Colors } from "./styles/colors";
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabsApp() {
+function BottomTabsNavigator() {
   return (
     <Tab.Navigator
       initialRouteName="Explore"
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
-        tabBarActiveTintColor: "#e8590c",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
+        tabBarActiveTintColor: Colors.PRIMARY,
       }}
     >
       <Tab.Screen
@@ -469,68 +526,95 @@ function BottomTabsApp() {
 export default function App() {
   return (
     <NavigationContainer>
-      <BottomTabsApp />
+      <BottomTabsNavigator />
     </NavigationContainer>
   );
 }
 ```
 
-### Step 3: Build the DrawerApp
+### Step 3: Build the DrawerNavigator
 
-Now create a `DrawerApp` component in the same file:
+Now create a `DrawerNavigator` component in the same file:
 
 ```jsx
+// App.js
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const Drawer = createDrawerNavigator();
 
-function DrawerApp() {
+function DrawerNavigator() {
   return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
-        drawerActiveBackgroundColor: "#e8590c",
-        drawerActiveTintColor: "#fff",
-      }}
-    >
+    <Drawer.Navigator>
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Explore" component={ExploreScreen} />
-      <Drawer.Screen
-        name="HotDeals"
-        component={HotDealsScreen}
-        options={{
-          headerTitle: "🔥 Hot Deals!",
-          drawerLabel: "Hot Deals!",
-        }}
-      />
+      <Drawer.Screen name="HotDeals" component={HotDealsScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
     </Drawer.Navigator>
   );
 }
 ```
 
-Switch `App.js` to render `DrawerApp` inside `NavigationContainer`:
+Switch `App.js` to render `DrawerNavigator` inside `NavigationContainer`:
 
 ```jsx
+// App.js
 export default function App() {
   return (
     <NavigationContainer>
-      <DrawerApp />
+      <DrawerNavigator />
     </NavigationContainer>
   );
 }
 ```
 
-**Device check:** swipe from the left edge of the screen to open the drawer. Tapping a menu item navigates to that screen. The active menu item is highlighted in orange.
+**Device check:** swipe from the left edge of the screen to open the drawer. Tapping a menu item navigates to that screen.
 
-Notice that the configuration API is nearly identical to the tab navigator. `screenOptions` applies to all screens; individual `options` props on each `Drawer.Screen` override per-screen settings. The only difference is the drawer-specific option names: `drawerActiveBackgroundColor`, `drawerActiveTintColor`, and `drawerLabel` instead of their tab equivalents.
+Notice that the configuration API is nearly identical to the tab navigator: a `Navigator` component wrapping `Screen` components, each with a `name` and `component` prop.
 
-### Step 4: Add drawer icons
+### Step 4: Customise screen titles and drawer labels
+
+Just as `Tab.Screen` accepts an `options` prop, so does `Drawer.Screen`. Use it to customise the HotDeals screen, whose identifier name does not read well as a title or label:
+
+```jsx
+// App.js
+<Drawer.Screen
+  name="HotDeals"
+  component={HotDealsScreen}
+  options={{
+    headerTitle: "🔥 Hot Deals!",
+    drawerLabel: "Hot Deals!",
+  }}
+/>
+```
+
+`headerTitle` works exactly as it did for the tab navigator. `drawerLabel` is the drawer equivalent of `tabBarLabel`: it controls the text shown for this screen in the slide-in menu.
+
+### Step 5: Style the navigator
+
+Use `screenOptions` on `Drawer.Navigator` to style every screen at once, the same way `screenOptions` worked on `Tab.Navigator`:
+
+```jsx
+// App.js
+<Drawer.Navigator
+  screenOptions={{
+    headerStyle: { backgroundColor: Colors.PRIMARY },
+    headerTintColor: Colors.WHITE,
+    drawerActiveBackgroundColor: Colors.PRIMARY,
+    drawerActiveTintColor: Colors.WHITE,
+  }}
+>
+```
+
+`headerStyle` and `headerTintColor` are identical to the tab navigator. `drawerActiveBackgroundColor` and `drawerActiveTintColor` are the drawer equivalents of `tabBarActiveTintColor`: they style the currently selected menu item instead of the currently selected tab.
+
+**Device check:** the header has an orange background, and the active menu item is highlighted in orange.
+
+### Step 6: Add drawer icons
 
 The `drawerIcon` option works the same way as `tabBarIcon`:
 
 ```jsx
+// App.js
 <Drawer.Screen
   name="Home"
   component={HomeScreen}
@@ -546,7 +630,7 @@ Add icons to all four screens.
 
 ---
 
-## Part 3: Stack Navigation
+## Part 4: Stack Navigation (35 minutes)
 
 The stack navigator is different in character from the tab and drawer navigators. Rather than presenting a flat list of peer screens, it manages a history: navigating to a screen pushes it onto a stack, and pressing back pops it off. This is how most detail screens in mobile apps work.
 
@@ -563,10 +647,12 @@ There are two stack navigator packages: `@react-navigation/stack` (JavaScript-ba
 Create `screens/MenuScreen.js`. This screen will serve as the starting point for stack navigation, since the stack navigator does not have a built-in tab bar or drawer to browse screens from:
 
 ```jsx
+// screens/MenuScreen.js
 import { Button, StyleSheet, View } from "react-native";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function MenuScreen() {
+export default function MenuScreen() {
   return (
     <View style={styles.container}>
       <Header>Menu</Header>
@@ -580,12 +666,10 @@ function MenuScreen() {
   );
 }
 
-export default MenuScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -595,22 +679,23 @@ const styles = StyleSheet.create({
 });
 ```
 
-### Step 3: Build the StackApp
+### Step 3: Build the StackNavigator
 
-Create a `StackApp` component in `App.js`:
+Create a `StackNavigator` component in `App.js`:
 
 ```jsx
+// App.js
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MenuScreen from "./screens/MenuScreen";
 
 const Stack = createNativeStackNavigator();
 
-function StackApp() {
+function StackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
       }}
     >
       <Stack.Screen name="Menu" component={MenuScreen} />
@@ -623,13 +708,14 @@ function StackApp() {
 }
 ```
 
-Switch `App.js` to render `StackApp`:
+Switch `App.js` to render `StackNavigator`:
 
 ```jsx
+// App.js
 export default function App() {
   return (
     <NavigationContainer>
-      <StackApp />
+      <StackNavigator />
     </NavigationContainer>
   );
 }
@@ -637,13 +723,31 @@ export default function App() {
 
 **Device check:** the menu screen appears with four buttons. The buttons do not navigate yet.
 
-### Step 4: Wire up navigation with the `navigation` prop
+### Step 4: Customise a screen title
+
+Just as with the tab and drawer navigators, `Stack.Screen` accepts an `options` prop for per-screen overrides. The HotDeals screen has the same problem here: its identifier name is not a good header title.
+
+```jsx
+// App.js
+<Stack.Screen
+  name="HotDeals"
+  component={HotDealsScreen}
+  options={{ headerTitle: "🔥 Hot Deals!" }}
+/>
+```
+
+`headerTitle` works exactly as it did for the tab and drawer navigators. The stack navigator has no tab bar or drawer label to set alongside it, since it only ever shows one screen at a time.
+
+**Device check:** navigate from Menu to HotDeals. The header now reads "🔥 Hot Deals!" instead of "HotDeals".
+
+### Step 5: Wire up navigation with the `navigation` prop
 
 React Navigation automatically provides a `navigation` prop to every registered screen component. Call `navigation.navigate("ScreenName")` to move to a different screen.
 
 Update `MenuScreen` to accept and use the `navigation` prop:
 
 ```jsx
+// screens/MenuScreen.js
 function MenuScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -670,13 +774,14 @@ function MenuScreen({ navigation }) {
 
 **Device check:** tapping the buttons navigates to the correct screens. The header shows a back arrow that returns to the previous screen in the stack.
 
-### Step 5: The `useNavigation` hook
+### Step 6: The `useNavigation` hook
 
 The `navigation` prop is only available to components that are directly registered as screens. If you move the button list into a child component, `navigation` will be `undefined` in that child.
 
 Move the buttons into a separate `MenuOptions` component to demonstrate this:
 
 ```jsx
+// screens/MenuScreen.js
 function MenuOptions({ navigation }) {
   return (
     <View style={styles.buttonsContainer}>
@@ -707,6 +812,7 @@ function MenuScreen({ navigation }) {
 This works, but passing `navigation` down as a prop becomes awkward in deeply nested components. React Navigation provides the `useNavigation` hook to solve this:
 
 ```jsx
+// screens/MenuScreen.js
 import { useNavigation } from "@react-navigation/native";
 
 function MenuOptions() {
@@ -740,15 +846,17 @@ function MenuScreen() {
 
 `useNavigation` retrieves the navigation object from context, so it works in any component anywhere in the tree, not just registered screens.
 
-### Step 6: Passing data between screens with route parameters
+### Step 7: Passing data between screens with route parameters
 
 Create `screens/ProductDetailScreen.js`:
 
 ```jsx
+// screens/ProductDetailScreen.js
 import { StyleSheet, Text, View } from "react-native";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function ProductDetailScreen() {
+export default function ProductDetailScreen() {
   return (
     <View style={styles.container}>
       <Header>Product Detail</Header>
@@ -757,27 +865,29 @@ function ProductDetailScreen() {
   );
 }
 
-export default ProductDetailScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
 });
 ```
 
-Register it in `StackApp`:
+Register it in `StackNavigator`:
 
 ```jsx
+// App.js
 <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
 ```
 
-Update `HotDealsScreen` to show product buttons that navigate to `ProductDetailScreen` with data attached. To use the `navigation` prop here, either accept it as a prop (since `HotDealsScreen` is a registered screen) or use `useNavigation`:
+So far, `navigation.navigate("ScreenName")` has only taken a single argument: the name of the screen to go to. `navigate` also accepts a second argument, an object of route parameters, which the destination screen can read once it has navigated there. This is how data is passed between screens.
+
+Update `HotDealsScreen` to show product buttons that navigate to `ProductDetailScreen` with a params object attached. To use the `navigation` prop here, either accept it as a prop (since `HotDealsScreen` is a registered screen) or use `useNavigation`:
 
 ```jsx
+// screens/HotDealsScreen.js
 import { Button, StyleSheet, View } from "react-native";
 import Header from "../components/Header";
 
@@ -792,7 +902,6 @@ function HotDealsScreen({ navigation }) {
             product: "Apple iPad",
             id: 123,
             price: 299,
-            fromScreen: "HotDeals",
           })
         }
       />
@@ -803,7 +912,16 @@ function HotDealsScreen({ navigation }) {
             product: "Apple iPhone",
             id: 124,
             price: 999,
-            fromScreen: "HotDeals",
+          })
+        }
+      />
+      <Button
+        title="Apple Watch @ $399"
+        onPress={() =>
+          navigation.navigate("ProductDetail", {
+            product: "Apple Watch",
+            id: 125,
+            price: 399,
           })
         }
       />
@@ -815,6 +933,7 @@ function HotDealsScreen({ navigation }) {
 Now update `ProductDetailScreen` to read the params using the `useRoute` hook:
 
 ```jsx
+// screens/ProductDetailScreen.js
 import { StyleSheet, Text, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Header from "../components/Header";
@@ -835,16 +954,17 @@ function ProductDetailScreen() {
 
 **Device check:** tapping a product on the Hot Deals screen navigates to the detail screen and shows the correct product data.
 
-### Step 7: Set the header title dynamically
+### Step 8: Set the header title dynamically
 
-The header title on `ProductDetailScreen` currently shows "ProductDetail". To display the product name instead, use the `options` callback on `Stack.Screen`. The callback receives `{ route }`, which contains the params passed during navigation:
+Step 4 set a static title with a plain object. The header title on `ProductDetailScreen` needs something different: it currently shows "ProductDetail", but the title should reflect whichever product was tapped. For this, pass a function to `options` instead of an object. The callback receives `{ route }`, which contains the params passed during navigation:
 
 ```jsx
+// App.js
 <Stack.Screen
   name="ProductDetail"
   component={ProductDetailScreen}
   options={({ route }) => ({
-    title: `Product Detail: ${route.params?.product ?? ""}`,
+    title: `Product Detail: ${route.params.product}`,
   })}
 />
 ```
@@ -855,7 +975,7 @@ The header title on `ProductDetailScreen` currently shows "ProductDetail". To di
 
 ---
 
-## Part 4: State Persistence Across Navigators
+## Part 5: State Persistence Across Navigators (15 minutes)
 
 This section demonstrates a behaviour that commonly surprises developers. Follow along and observe what happens.
 
@@ -864,11 +984,13 @@ This section demonstrates a behaviour that commonly surprises developers. Follow
 Add a search input to `HomeScreen`. First, update `HomeScreen.js` to accept a `navigation` prop and add a text input:
 
 ```jsx
+// screens/HomeScreen.js
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useState } from "react";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function HomeScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
@@ -885,12 +1007,10 @@ function HomeScreen({ navigation }) {
   );
 }
 
-export default HomeScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -910,7 +1030,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-Make sure `App.js` is using `StackApp`. Now:
+Make sure `App.js` is using `StackNavigator`. Now:
 
 1. Navigate: Menu > Home
 2. Type something in the search field
@@ -921,7 +1041,7 @@ The typed text is gone. When the back button pops `HomeScreen` off the stack, Re
 
 ### Tab and Drawer Navigators: state persists
 
-Switch `App.js` to use `BottomTabsApp` and repeat the same steps:
+Switch `App.js` to use `BottomTabsNavigator` and repeat the same steps:
 
 1. Go to the Home tab
 2. Type something in the search field
@@ -941,6 +1061,7 @@ What if you want to clear the search field each time the user arrives at `HomeSc
 Update `HomeScreen.js`:
 
 ```jsx
+// screens/HomeScreen.js
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 
@@ -959,118 +1080,154 @@ function HomeScreen() {
 
 The callback must be wrapped in `useCallback` with an empty dependency array. Without it, a new function reference is created on every render, and `useFocusEffect` would run on every render instead of only when the screen gains focus.
 
-**Device check:** switch between `StackApp` and `BottomTabsApp` in `App.js`. In both cases, navigating away from Home and returning should now clear the search field.
+**Device check:** switch between `StackNavigator` and `BottomTabsNavigator` in `App.js`. In both cases, navigating away from Home and returning should now clear the search field.
 
 ---
 
-## Part 5: Nesting Navigators
+## Part 6: Nesting Navigators (15 minutes)
 
 Production apps commonly combine navigators. A typical pattern is to nest a bottom tab navigator inside a stack navigator, so that detail screens (like `ProductDetailScreen`) can be pushed on top of any tab, and the back button returns the user to whichever tab they came from.
 
-Create a `NestedApp` component in `App.js`:
+This is a good point to move navigator configuration out of `App.js` and into its own `navigators/` folder, since `App.js` is starting to hold a lot of unrelated setup. Create `navigators/BottomTabsNavigator.js`:
 
 ```jsx
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// navigators/BottomTabsNavigator.js
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Ionicons from "@react-native-vector-icons/ionicons";
+import HomeScreen from "../screens/HomeScreen";
+import ExploreScreen from "../screens/ExploreScreen";
+import HotDealsScreen from "../screens/HotDealsScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+import { Colors } from "../styles/colors";
 
-const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function BottomTabsApp() {
+export default function BottomTabsNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="Explore"
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
-        tabBarActiveTintColor: "#e8590c",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
+        tabBarActiveTintColor: Colors.PRIMARY,
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Explore" component={ExploreScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Explore"
+        component={ExploreScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="search" size={size} color={color} />
+          ),
+        }}
+      />
       <Tab.Screen
         name="HotDeals"
         component={HotDealsScreen}
-        options={{ headerTitle: "🔥 Hot Deals!", tabBarLabel: "Hot Deals!" }}
+        options={{
+          headerTitle: "🔥 Hot Deals!",
+          tabBarLabel: "Hot Deals!",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bonfire-sharp" size={size} color={color} />
+          ),
+        }}
       />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" size={size} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
+```
 
-function NestedApp() {
+Create `navigators/NestedNavigator.js`, which nests `BottomTabsNavigator` inside a stack:
+
+```jsx
+// navigators/NestedNavigator.js
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import BottomTabsNavigator from "./BottomTabsNavigator";
+import ProductDetailScreen from "../screens/ProductDetailScreen";
+import { Colors } from "../styles/colors";
+
+const Stack = createNativeStackNavigator();
+
+export default function NestedNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
       }}
     >
-      <Stack.Screen
-        name="BottomTabs"
-        component={BottomTabsApp}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="BottomTabs" component={BottomTabsNavigator} />
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetailScreen}
         options={({ route }) => ({
-          title: `Product Detail: ${route.params?.product ?? ""}`,
-          headerBackTitle: route.params?.fromScreen ?? "Back",
+          title: `Product Detail: ${route.params.product}`,
         })}
       />
     </Stack.Navigator>
   );
 }
+```
+
+Update `App.js` to render `NestedNavigator`:
+
+```jsx
+// App.js
+import { NavigationContainer } from "@react-navigation/native";
+import NestedNavigator from "./navigators/NestedNavigator";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <NestedApp />
+      <NestedNavigator />
     </NavigationContainer>
   );
 }
 ```
 
-Key points:
+**Device check:** two headers now appear stacked on top of each other on the Home, Explore, Hot Deals, and Settings tabs, one from `BottomTabsNavigator` and one from the outer `NestedNavigator`. Each tab is a screen registered inside `NestedNavigator`, and `NestedNavigator` gives every screen it registers a header by default, `BottomTabsNavigator` included, even though it already renders its own header internally.
 
-- `headerShown: false` on the `BottomTabs` screen hides the outer stack's header so only the tab navigator's header is visible. Without this, two headers would appear stacked.
-- `ProductDetailScreen` is registered at the outer stack level so it can be reached from any tab via `navigation.navigate('ProductDetail', params)`.
-- `headerBackTitle` (iOS only) customises the label shown on the back arrow, for example "Hot Deals" instead of the generic "Back".
-
-**Device check:** navigating to a product from the Hot Deals tab pushes `ProductDetailScreen` on top of the tabs. The tab bar disappears. Pressing back returns to the Hot Deals tab.
-
----
-
-## Bonus Challenges
-
-Work on as many as you can. They are listed in order of difficulty. No solutions are provided.
-
-### Challenge 1: Custom tab bar label with emoji
-
-For the HotDeals tab, set `tabBarLabel` to an emoji-prefixed string (for example, "🔥 Deals"). Set `headerTitle` separately to a different string. Observe that the two can be controlled independently.
-
-### Challenge 2: `headerBackTitle`
-
-In the nested navigator, update the `HotDealsScreen` to pass `fromScreen: 'Hot Deals'` in the params when navigating to `ProductDetailScreen`. Update the `ProductDetailScreen` stack screen options to use `route.params?.fromScreen ?? 'Back'` as the `headerBackTitle`. Verify on a physical iOS device or iOS simulator that the back button shows the correct label.
-
-### Challenge 3: `useIsFocused`
-
-Import `useIsFocused` from `@react-navigation/native`. In any screen component, use it to conditionally render `null` when the screen is not focused:
+Fix this by hiding the outer stack's header for the `BottomTabs` screen specifically:
 
 ```jsx
-const isFocused = useIsFocused();
-if (!isFocused) return null;
+// navigators/NestedNavigator.js
+<Stack.Screen
+  name="BottomTabs"
+  component={BottomTabsNavigator}
+  options={{ headerShown: false }}
+/>
 ```
 
-Test this in both the tab navigator and the stack navigator. Describe in your own words how the visible behaviour differs between the two navigator types, and explain why.
+`headerShown: false` only affects this one `Stack.Screen`; `ProductDetailScreen` is untouched and keeps its own header from the outer stack.
 
-### Challenge 4: Nested drawer inside tabs
+Key points:
 
-Replace one of the tabs in `BottomTabsApp` with a `DrawerApp` as its component. What happens when you tap that tab? What are the usability problems with this pattern? When might nesting a drawer inside a tab actually be appropriate?
+- `ProductDetailScreen` is registered at the outer stack level so it can be reached from any tab via `navigation.navigate('ProductDetail', params)`.
+- The back button on `ProductDetailScreen` appears automatically, the stack navigator always provides one when there is a previous screen to return to. By default it is labelled with the previous screen's title (iOS only shows this label; Android just shows an arrow).
+
+**Device check:** only one header appears on each tab. Navigating to a product from the Hot Deals tab pushes `ProductDetailScreen` on top of the tabs. The tab bar disappears. Pressing back returns to the Hot Deals tab.
 
 ---
 
-## Optional Extension: Authenticated Navigation
+## Part 7: Authenticated Navigation (30 minutes, only if time permits)
 
 > **Only if time permits.** This section adds a login flow to the app using the same navigation patterns already covered. It requires familiarity with the Context API from Lesson 2.6.
 
@@ -1078,9 +1235,10 @@ Many apps show a different set of screens depending on whether the user is logge
 
 ### Step 1: Create the Auth Context
 
-Create `context/AuthContext.js`. This context holds the authentication state and exposes `login` and `logout` functions:
+Create `contexts/AuthContext.js`. This context holds the authentication state and exposes `login` and `logout` functions:
 
 ```jsx
+// contexts/AuthContext.js
 import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
@@ -1103,8 +1261,6 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
-export default AuthContext;
 ```
 
 ### Step 2: Create the Login and Register screens
@@ -1112,9 +1268,11 @@ export default AuthContext;
 Create `screens/LoginScreen.js`:
 
 ```jsx
+// screens/LoginScreen.js
 import { useContext, useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
+import { Colors } from "../styles/colors";
 
 export default function LoginScreen({ navigation }) {
   const { login } = useContext(AuthContext);
@@ -1154,7 +1312,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
   },
   title: {
     fontSize: 24,
@@ -1179,8 +1337,10 @@ const styles = StyleSheet.create({
 Create `screens/RegisterScreen.js` with the same structure, replacing the Login button with a Register button that calls `navigation.goBack()` after a mock registration:
 
 ```jsx
+// screens/RegisterScreen.js
 import { useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Colors } from "../styles/colors";
 
 export default function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -1220,7 +1380,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.WHITE,
   },
   title: {
     fontSize: 24,
@@ -1249,9 +1409,11 @@ Create a `navigators/` folder to keep the navigation configuration organised.
 Create `navigators/AuthStackNavigator.js`. This stack is shown when the user is not logged in:
 
 ```jsx
+// navigators/AuthStackNavigator.js
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import { Colors } from "../styles/colors";
 
 const Stack = createNativeStackNavigator();
 
@@ -1259,8 +1421,8 @@ export default function AuthStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
         headerShown: false,
       }}
     >
@@ -1271,12 +1433,14 @@ export default function AuthStackNavigator() {
 }
 ```
 
-Create `navigators/AppStackNavigator.js`. This stack is shown when the user is logged in. It wraps the `BottomTabsApp` from Part 5 and adds `ProductDetailScreen` at the outer level:
+Create `navigators/AppStackNavigator.js`. This stack is shown when the user is logged in. It wraps the `BottomTabsNavigator` from Part 6 and adds `ProductDetailScreen` at the outer level:
 
 ```jsx
+// navigators/AppStackNavigator.js
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BottomTabsApp from "./BottomTabsNavigator";
+import BottomTabsNavigator from "./BottomTabsNavigator";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
+import { Colors } from "../styles/colors";
 
 const Stack = createNativeStackNavigator();
 
@@ -1284,21 +1448,20 @@ export default function AppStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "#e8590c" },
-        headerTintColor: "#fff",
+        headerStyle: { backgroundColor: Colors.PRIMARY },
+        headerTintColor: Colors.WHITE,
       }}
     >
       <Stack.Screen
         name="BottomTabs"
-        component={BottomTabsApp}
+        component={BottomTabsNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetailScreen}
         options={({ route }) => ({
-          title: `Product Detail: ${route.params?.product ?? ""}`,
-          headerBackTitle: route.params?.fromScreen ?? "Back",
+          title: `Product Detail: ${route.params.product}`,
         })}
       />
     </Stack.Navigator>
@@ -1311,9 +1474,10 @@ export default function AppStackNavigator() {
 Create `navigators/NavigationApp.js`. This component reads `isAuthenticated` from context and renders either the app stack or the auth stack:
 
 ```jsx
+// navigators/NavigationApp.js
 import { useContext } from "react";
 import { ActivityIndicator, View } from "react-native";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import AppStackNavigator from "./AppStackNavigator";
 import AuthStackNavigator from "./AuthStackNavigator";
 
@@ -1337,8 +1501,9 @@ export default function NavigationApp() {
 Update `App.js` to wrap `NavigationApp` with both `AuthProvider` and `NavigationContainer`:
 
 ```jsx
+// App.js
 import { NavigationContainer } from "@react-navigation/native";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import NavigationApp from "./navigators/NavigationApp";
 
 export default function App() {
@@ -1359,12 +1524,14 @@ export default function App() {
 Add a Logout button to `SettingsScreen` so users can return to the login flow:
 
 ```jsx
+// screens/SettingsScreen.js
 import { useContext } from "react";
 import { Button, StyleSheet, View } from "react-native";
-import AuthContext from "../context/AuthContext";
+import { AuthContext } from "../contexts/AuthContext";
 import Header from "../components/Header";
+import { Colors } from "../styles/colors";
 
-function SettingsScreen() {
+export default function SettingsScreen() {
   const { logout } = useContext(AuthContext);
 
   return (
@@ -1374,11 +1541,45 @@ function SettingsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.WHITE,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 ```
 
 **Device check:** tapping Logout returns to the Login screen. The navigation history is cleared because the navigator stack itself was replaced, so the user cannot press back into the app.
 
 > Swapping the entire navigator stack on login/logout is the standard React Navigation pattern for authentication. Because `NavigationApp` conditionally returns a completely different navigator, React Navigation unmounts the old stack and mounts the new one. There is no need to manually clear navigation history.
+
+---
+
+## Bonus Challenges
+
+Work on as many as you can. They are listed in order of difficulty. No solutions are provided.
+
+### Challenge 1: Custom tab bar label with emoji
+
+For the HotDeals tab, set `tabBarLabel` to an emoji-prefixed string (for example, "🔥 Deals"). Set `headerTitle` separately to a different string. Observe that the two can be controlled independently.
+
+### Challenge 2: `useIsFocused`
+
+Import `useIsFocused` from `@react-navigation/native`. In any screen component, use it to conditionally render `null` when the screen is not focused:
+
+```jsx
+const isFocused = useIsFocused();
+if (!isFocused) return null;
+```
+
+Test this in both the tab navigator and the stack navigator. Describe in your own words how the visible behaviour differs between the two navigator types, and explain why.
+
+### Challenge 3: Nested drawer inside tabs
+
+Replace one of the tabs in `BottomTabsNavigator` with a `DrawerNavigator` as its component. What happens when you tap that tab? What are the usability problems with this pattern? When might nesting a drawer inside a tab actually be appropriate?
 
 ---
 

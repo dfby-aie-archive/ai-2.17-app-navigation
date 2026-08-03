@@ -1,6 +1,6 @@
 # Pre-Reading: Lesson 2.17: Application Flow Control with Navigation Frameworks
 
-Timebox **2–3 hours** across these resources before the lesson. You do not need to memorise everything; the goal is to build a mental model so the hands-on lab makes sense faster.
+Timebox **1–1.5 hours** across these resources before the lesson. You do not need to memorise everything; the goal is to build a mental model so the hands-on lab makes sense faster.
 
 ---
 
@@ -62,14 +62,6 @@ Read the official documentation for each of the three navigators used in this le
 - In a Stack Navigator, navigating back from a screen pops it off the stack and unmounts it. Local state is lost.
 - In Tab and Drawer Navigators, screens stay mounted when you switch away. Local state is preserved because the component is never unmounted.
 - `useFocusEffect` runs a side effect when a screen gains focus. It is useful for refreshing data or resetting state each time a user arrives at a screen.
-
----
-
-## 5. Watch: React Navigation Crash Course
-
-**Watch (20 min)**
-
-- [React Navigation v6 Crash Course](https://www.youtube.com/watch?v=OmQCU-3KPms): Watch the sections covering Stack, Tab, and Drawer navigators. You do not need to follow along with code; focus on seeing the navigators in action on a device so you recognise what each one looks and feels like before the lab.
 
 ---
 

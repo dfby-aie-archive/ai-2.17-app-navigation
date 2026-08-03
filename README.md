@@ -22,15 +22,15 @@ This lesson teaches learners how to implement multi-screen navigation in React N
 | Duration | What | How or Why |
 |---|---|---|
 | 10 min | Welcome and recap | Briefly revisit Lesson 2.16: React Native components, Expo setup; set context for today's focus on multi-screen apps |
-| 35 min | Lecture: Navigation in React Native | Slides: why navigation libraries exist, navigator types overview, NavigationContainer, screen registration, params, state persistence |
+| 40 min | Lecture: Navigation in React Native | Slides: why navigation libraries exist, React Navigation vs. React Router, navigator types overview, installing React Navigation |
 | 5 min | Break | |
-| 10 min | Setup and the naive approach | Code-along: scaffold `LearnNavigationApp`, create shared screens and `Header` component, demonstrate the `useState` switcher and its limitations |
-| 30 min | Lab Part 1: Tab Navigation | Code-along: install React Navigation, `createBottomTabNavigator`, register screens, Activity 1 (add Explore tab), customise titles/labels/styling, Activity 2 (set icons for all tabs) |
-| 20 min | Lab Part 2: Drawer Navigation | Code-along: install drawer + gesture/animation deps, build `DrawerApp` alongside `BottomTabsApp`, customise styling and icons |
+| 10 min | Setup and the naive approach | Code-along: scaffold `learn-navigation-app`, create shared screens and `Header` component, demonstrate the `useState` switcher and its limitations |
+| 30 min | Lab Part 2: Tab Navigation | Code-along: install React Navigation, `createBottomTabNavigator`, register screens, Activity 1 (add Explore tab), create HotDeals screen, customise titles/labels/default screen/styling, Activity 2 (set icons for all tabs) |
+| 20 min | Lab Part 3: Drawer Navigation | Code-along: install drawer + gesture/animation deps, build `DrawerNavigator`, customise titles, labels, styling, and icons |
 | 5 min | Break | |
-| 30 min | Lab Part 3: Stack Navigation | Code-along: install native stack, build `MenuScreen`, wire `navigation.navigate`, introduce `useNavigation`, pass route params, set dynamic header titles, explain `useLayoutEffect` vs `options` callback |
-| 10 min | Lab Part 4: State Persistence | Demonstration: show state loss in Stack vs. state retention in Tabs/Drawer; introduce `useFocusEffect` to reset state on focus |
-| 10 min | Lab Part 5: Nesting Navigators | Code-along: wrap `BottomTabsApp` inside a stack, `headerShown: false`, `ProductDetailScreen` accessible from any tab |
-| 15 min | Optional: Authenticated Navigation | Code-along: `AuthContext`, `LoginScreen`, `RegisterScreen`, split stacks, conditional navigator rendering, Logout button; skip if time is short |
-| 15 min | Wrap up and Q&A | Recap objectives, review when to use each navigator, preview Lesson 2.18 (native device capabilities) |
-| **Total** | | **~180 min core; up to ~195 min with optional section** |
+| 30 min | Lab Part 4: Stack Navigation | Code-along: install native stack, build `MenuScreen`, wire up navigation with the `navigation` prop, introduce `useNavigation`, pass route params, set dynamic header titles |
+| 10 min | Lab Part 5: State Persistence | Demonstration: show state loss in Stack vs. state retention in Tabs/Drawer; introduce `useFocusEffect` to reset state on focus |
+| 10 min | Lab Part 6: Nesting Navigators | Code-along: wrap `BottomTabsApp` inside a stack, `headerShown: false`, `ProductDetailScreen` accessible from any tab |
+| 10 min | Wrap up and Q&A | Recap objectives, review when to use each navigator, preview Lesson 2.18 (native device capabilities) |
+| **Total** | | **~180 min** |
+| 30 min | Bonus (only if time permits): Part 7 Authenticated Navigation | Code-along: `AuthContext`, `LoginScreen`, `RegisterScreen`, split stacks, conditional navigator rendering, Logout button; not part of the core lesson plan, cover only if the class is ahead of schedule |
