@@ -729,24 +729,7 @@ export default function App() {
 
 **Device check:** the menu screen appears with four buttons. The buttons do not navigate yet.
 
-### Step 4: Customise a screen title
-
-Just as with the tab and drawer navigators, `Stack.Screen` accepts an `options` prop for per-screen overrides. The HotDeals screen has the same problem here: its identifier name is not a good header title.
-
-```jsx
-// App.js
-<Stack.Screen
-  name="HotDeals"
-  component={HotDealsScreen}
-  options={{ headerTitle: "🔥 Hot Deals!" }}
-/>
-```
-
-`headerTitle` works exactly as it did for the tab and drawer navigators. The stack navigator has no tab bar or drawer label to set alongside it, since it only ever shows one screen at a time.
-
-**Device check:** navigate from Menu to HotDeals. The header now reads "🔥 Hot Deals!" instead of "HotDeals".
-
-### Step 5: Wire up navigation with the `navigation` prop
+### Step 4: Wire up navigation with the `navigation` prop
 
 React Navigation automatically provides a `navigation` prop to every registered screen component. Call `navigation.navigate("ScreenName")` to move to a different screen.
 
@@ -779,6 +762,23 @@ function MenuScreen({ navigation }) {
 ```
 
 **Device check:** tapping the buttons navigates to the correct screens. The header shows a back arrow that returns to the previous screen in the stack.
+
+### Step 5: Customise a screen title
+
+Just as with the tab and drawer navigators, `Stack.Screen` accepts an `options` prop for per-screen overrides. The HotDeals screen has the same problem here: its identifier name is not a good header title.
+
+```jsx
+// App.js
+<Stack.Screen
+  name="HotDeals"
+  component={HotDealsScreen}
+  options={{ headerTitle: "🔥 Hot Deals!" }}
+/>
+```
+
+`headerTitle` works exactly as it did for the tab and drawer navigators. The stack navigator has no tab bar or drawer label to set alongside it, since it only ever shows one screen at a time.
+
+**Device check:** navigate from Menu to HotDeals. The header now reads "🔥 Hot Deals!" instead of "HotDeals".
 
 ### Step 6: The `useNavigation` hook
 
@@ -962,7 +962,7 @@ function ProductDetailScreen() {
 
 ### Step 8: Set the header title dynamically
 
-Step 4 set a static title with a plain object. The header title on `ProductDetailScreen` needs something different: it currently shows "ProductDetail", but the title should reflect whichever product was tapped. For this, pass a function to `options` instead of an object. The callback receives `{ route }`, which contains the params passed during navigation:
+Step 5 set a static title with a plain object. The header title on `ProductDetailScreen` needs something different: it currently shows "ProductDetail", but the title should reflect whichever product was tapped. For this, pass a function to `options` instead of an object. The callback receives `{ route }`, which contains the params passed during navigation:
 
 ```jsx
 // App.js
