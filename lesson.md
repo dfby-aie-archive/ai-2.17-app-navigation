@@ -450,7 +450,13 @@ Three additional packages are required:
 
 > **Install order matters here.** Installing `react-native-reanimated` first via `npx expo install` lets Expo pin a version compatible with your installed React Native version. If `@react-navigation/drawer` is installed first, npm may try to resolve `react-native-reanimated` to its newest version before Expo gets a chance to select the compatible one, which can produce an `ERESOLVE` peer dependency error.
 
-Kill the development server and restart it after installation. These are native modules and require a fresh build to load correctly.
+Kill the development server and restart it with the cache cleared:
+
+```bash
+npx expo start -c
+```
+
+Reanimated and Worklets rely on a Babel plugin that transforms code as Metro bundles it. Metro caches files it has already transformed, so a plain restart can keep serving the old versions without the worklet conversion. The `-c` flag clears that cache so every file is transformed again.
 
 ### Step 2: Create a DrawerNavigator component
 
